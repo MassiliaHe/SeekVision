@@ -1,6 +1,3 @@
-Here’s a **clean and professional README** with an **example of the original and annotated image**, formatted in Markdown. Just **copy and paste it into your `README.md` file** in VS Code.
-
----
 
 ```markdown
 # **Lasqo: DINO-X Inference with DDS Cloud API** 🚀  
