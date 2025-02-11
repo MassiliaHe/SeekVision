@@ -4,6 +4,10 @@ import numpy as np
 import tempfile
 import os
 import supervision as sv
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file (if present)
+load_dotenv()
 
 # DDS Cloud API imports
 from dds_cloudapi_sdk import Config, Client, TextPrompt
@@ -89,6 +93,8 @@ def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image
     img = cv2.imdecode(file_array, cv2.IMREAD_COLOR)
 
     # Create a detections object for visualization using supervision
+    if not len(boxes):
+        return img.copy(), json_result
     detections = sv.Detections(
         xyxy=boxes,
         mask=masks.astype(bool),
@@ -114,16 +120,17 @@ def main():
 
     # Sidebar: Configuration options for API key, prompt, and bbox threshold
     st.sidebar.header("Configuration")
+    API_KEY = os.getenv('API_KEY') or ""
     api_token = st.sidebar.text_input(
-        "API Token", type="password", value=""
+        "API Token", type="password", value=API_KEY
     )
     text_prompt = st.sidebar.text_input("Text Prompt", value="Text . logo . image")
     bbox_threshold = st.sidebar.slider(
-        "BBox Threshold", min_value=0.0, max_value=1.0, value=0.25, step=0.05
+        "BBox Threshold", min_value=0.0, max_value=1.0, value=0.20, step=0.05
     )
 
     # Main: Upload an image
-    uploaded_file = st.file_uploader("Choose an image", type=["png", "jpg", "jpeg"])
+    uploaded_file = st.file_uploader("Choose an image", type=["png", "jpg", "jpeg"], accept_multiple_files=False)
 
     if st.button("Run Inference"):
         if uploaded_file is not None:
