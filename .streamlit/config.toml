@@ -3,3 +3,9 @@ runOnSave = true
 
 [browser]
 gatherUsageStats = false
+
+[client]
+toolbarMode = "viewer"
+
+[theme]
+base = "light"
