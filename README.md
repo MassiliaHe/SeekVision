@@ -9,7 +9,7 @@ Upload an image, set a text prompt, and get **annotated results with bounding bo
 ## 📌 **Example Output**  
 
 ### 🖼️ **Original vs. Annotated Image**  
-![Original](E:\Workspace\LasqoApp\Assets\iphone-apps-app-store.jpg) | ![Annotated](E:\Workspace\LasqoApp\results\iphone-apps-app-store.png)
+![Original](E:/Workspace/LasqoApp/Assets/iphone-apps-app-store.jpg) | ![Annotated](r"E:\Workspace\LasqoApp\results\iphone-apps-app-store.png")
 
 ## ⚙️ **Installation & Setup**  
 
