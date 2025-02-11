@@ -1,5 +1,4 @@
 
-```markdown
 # **Lasqo: DINO-X Inference with DDS Cloud API** 🚀  
 
 Lasqo is a **Streamlit app** for object detection and segmentation using the **DDS Cloud API** and **DINO-X**.  
@@ -10,11 +9,7 @@ Upload an image, set a text prompt, and get **annotated results with bounding bo
 ## 📌 **Example Output**  
 
 ### 🖼️ **Original vs. Annotated Image**  
-| Original Image | Annotated Image |
-|---------------|----------------|
-| ![Original](E:\Workspace\LasqoApp\Assets\iphone-apps-app-store.jpg) | ![Annotated](E:\Workspace\LasqoApp\results\iphone-apps-app-store.png) |
-
----
+![Original](assets/original_image.jpg) | ![Annotated](assets/annotated_image.jpg)
 
 ## ⚙️ **Installation & Setup**  
 
