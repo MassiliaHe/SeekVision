@@ -1,8 +1,8 @@
-import streamlit as st
-import cv2
-import numpy as np
-import tempfile
 import os
+import cv2
+import tempfile
+import numpy as np
+import streamlit as st
 import supervision as sv
 from dotenv import load_dotenv
 
@@ -116,18 +116,21 @@ def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image
 
 
 def main():
+    st.set_page_config(page_title="Lasqo", page_icon="icons/lasqo_small.png")
     st.title("DINO-X Inference with DDS Cloud API")
 
     # Sidebar: Configuration options for API key, prompt, and bbox threshold
-    st.sidebar.header("Configuration")
-    API_KEY = os.getenv('API_KEY') or ""
-    api_token = st.sidebar.text_input(
-        "API Token", type="password", value=API_KEY
-    )
-    text_prompt = st.sidebar.text_input("Text Prompt", value="Text . logo . image")
-    bbox_threshold = st.sidebar.slider(
-        "BBox Threshold", min_value=0.0, max_value=1.0, value=0.20, step=0.05
-    )
+    with st.sidebar:
+        st.logo("icons/lasqo.png", size="large", icon_image="icons/lasqo_small.png")
+        st.header("Configuration")
+        API_KEY = os.getenv('API_KEY') or ""
+        api_token = st.text_input(
+            "API Token", type="password", value=API_KEY
+        )
+        text_prompt = st.text_input("Text Prompt", value="Text . logo . image")
+        bbox_threshold = st.slider(
+            "BBox Threshold", min_value=0.0, max_value=1.0, value=0.20, step=0.05
+        )
 
     # Main: Upload an image
     uploaded_file = st.file_uploader("Choose an image", type=["png", "jpg", "jpeg"], accept_multiple_files=False)
