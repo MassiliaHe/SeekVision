@@ -147,8 +147,6 @@ def main():
                 annotated_img, result_json = run_inference(
                     api_token, text_prompt, bbox_threshold, image_bytes
                 )
-                # result_json = {}
-                # annotated_img = img 
                 annotated_rgb = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
 
             # Container for side-by-side image display
@@ -165,7 +163,6 @@ def main():
             with st.container():
                 st.subheader("Inference Output (JSON)")
                 st.json(result_json)
-
         else:
             st.warning("Please add an image to run DinoX Inference")
 
