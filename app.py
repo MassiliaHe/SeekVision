@@ -146,7 +146,6 @@ def main():
 
             # Run the inference using your custom function
             with st.spinner("Running inference..."):
-                print("Inference ...")
                 annotated_img, result_json = run_inference(
                     api_token, text_prompt, bbox_threshold, image_bytes
                 )
@@ -163,7 +162,7 @@ def main():
                     st.image(annotated_rgb, use_container_width=True)
 
             # Container for nicely displaying the JSON output
-            with st.container():
+            with st.container(border=True):
                 st.subheader("Inference Output (JSON)")
                 st.json(result_json)
         else:
