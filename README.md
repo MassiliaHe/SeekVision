@@ -16,7 +16,7 @@ Upload an image, set a text prompt, and get **annotated results with bounding bo
 
 ### **1️⃣ Clone the Repository**  
 ```bash
-git clone https://github.com/yourusername/lasqo.git
+git clone https://github.com/MassiliaHe/LasqoApp.git
 cd lasqo
 ```
 
