@@ -32,7 +32,7 @@ API_KEY=your_dds_api_key_here
 
 ### **4️⃣ Run the Application**  
 ```bash
-streamlit run app.py
+uv run streamlit run app.py
 ```
 
 ---
