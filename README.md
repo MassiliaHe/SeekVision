@@ -10,7 +10,7 @@ Easily upload your images, choose prompt or prompt-free mode, and instantly visu
 
 | Original | Annotated |
 | :------: | :-------: |
-| ![Original](Assets/iphone-apps-app-store.jpg) | ![Annotated](Assets/annotated_image.png) |
+| ![Original](Assets/iphone-apps-app-store.jpg) | ![Annotated](Assets/iphone-apps-app-store.png) |
 
 ---
 
