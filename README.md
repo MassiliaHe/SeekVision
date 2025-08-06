@@ -101,9 +101,3 @@ Bounding boxes, masks, and class labels are visualized directly on your image.
 
 If you find this project helpful, please consider giving it a ⭐️ on [GitHub](https://github.com/MassiliaHe/SeekVision)!
 Feel free to open issues or contribute.
-
----
-
-> *Tip: To display your own sample images in the table above, simply place them in the `Assets/` folder and update the README links.*
-
-```
