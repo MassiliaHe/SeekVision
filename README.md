@@ -1,66 +1,76 @@
-# **SeekVision: DINO-X Detection & Segmentation with DDS Cloud API** 🎯
-
-SeekVision is a **Streamlit application** for object detection and segmentation using the **DDS Cloud API** and **DINO-X** models.  
-Upload your image, choose prompt or prompt-free mode, and get instant visual results: bounding boxes, masks, and class labels.
+Bien sûr, voici une **version professionnelle et claire de ton README** — mise en forme moderne, sections lisibles, bon anglais, et liens/images faciles à adapter.
 
 ---
 
-## 📌 **Example Output**
+````markdown
+# 🚀 SeekVision: DINO-X Detection & Segmentation with DDS Cloud API
 
-### 🖼️ Original vs. Annotated Image
+**SeekVision** is an interactive web app for object detection and segmentation using the latest **DDS Cloud API** and **DINO-X** models.  
+Easily upload your images, choose prompt or prompt-free mode, and instantly visualize results with bounding boxes, segmentation masks, and class labels.
+
+---
+
+## 🖼️ Example Output
 
 | Original | Annotated |
 | :------: | :-------: |
-| ![Original](Assets/iphone-apps-app-store.jpg) | ![Annotated](assets/annotated_image.jpg) |
+| ![Original](Assets/iphone-apps-app-store.jpg) | ![Annotated](Assets/annotated_image.png) |
 
 ---
 
-## ⚙️ **Installation & Setup**
+## ⚙️ Installation & Setup
 
-### 1️⃣ Clone the Repository
+**1. Clone the Repository**
 ```bash
-git clone https://github.com/YourUsername/SeekVision.git
+git clone https://github.com/MassiliaHe/SeekVision.git
 cd SeekVision
-2️⃣ Install Dependencies
-bash
-Copier
-Modifier
+````
+
+**2. Install Dependencies**
+
+```bash
 uv pip install -r pyproject.toml
-Or use pip install -r requirements.txt if not using uv.
+```
 
-3️⃣ Set Up Environment Variables
-Create a .env file and add your DDS Cloud API key:
+*Or use* `pip install -r requirements.txt` *if not using uv.*
 
-env
-Copier
-Modifier
+**3. Set Up Environment Variables**
+Create a `.env` file at the project root and add your DDS Cloud API key:
+
+```env
 API_KEY=your_dds_api_key_here
-4️⃣ Run the Application
-bash
-Copier
-Modifier
+```
+
+**4. Run the Application**
+
+```bash
 uv run streamlit run app.py
-🎯 Usage
-Enter your API key or load it from .env.
+```
 
-Choose Prompt or Prompt-Free mode.
+*Or use* `streamlit run app.py` *directly if you prefer.*
 
-(Optional) Set a text prompt (e.g., Text . logo . image).
+---
 
-Adjust the bounding box threshold if needed.
+## 🚦 Usage Guide
 
-Upload an image (.jpg, .png).
+1. **Enter your API key** (or load it from your `.env`).
+2. **Choose** Prompt or Prompt-Free mode.
+3. *(Optional)* **Set a text prompt** (e.g., `Text . logo . image`).
+4. **Adjust** the bounding box threshold as needed.
+5. **Upload an image** (`.jpg` or `.png`).
+6. **Click "Run Inference"** to get annotated results and downloadable JSON.
 
-Click "Run Inference" and view results instantly.
+---
 
-📊 Output Format
-🖼️ Annotated Image
-Bounding boxes, masks, and class labels are displayed on your image.
+## 📦 Output Formats
 
-📝 JSON Output (COCO-Style)
-json
-Copier
-Modifier
+### Annotated Image
+
+Bounding boxes, masks, and class labels are visualized directly on your image.
+
+### JSON Output (COCO-Style)
+
+```json
 {
     "detections": [
         {
@@ -71,18 +81,33 @@ Modifier
         }
     ]
 }
-🛠 Tech Stack
-Streamlit – User Interface
+```
 
-DDS Cloud API – Object Detection
+---
 
-Supervision – Visualization
+## 🛠 Tech Stack
 
-OpenCV, NumPy – Image Processing
+* **Streamlit** — Fast web interface
+* **DDS Cloud API** — Cutting-edge object detection & segmentation
+* **Supervision** — Visualization library
+* **OpenCV, NumPy** — Image processing
+* **pycocotools** — COCO mask decoding
 
-📜 License
-MIT License
+---
 
-⭐ Support the Project
-If you find this useful, give it a star ⭐ on GitHub! 🎉
+## 📄 License
 
+[MIT License](LICENSE)
+
+---
+
+## ⭐️ Support
+
+If you find this project helpful, please consider giving it a ⭐️ on [GitHub](https://github.com/MassiliaHe/SeekVision)!
+Feel free to open issues or contribute.
+
+---
+
+> *Tip: To display your own sample images in the table above, simply place them in the `Assets/` folder and update the README links.*
+
+```
