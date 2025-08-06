@@ -31,7 +31,7 @@ uv pip install -r pyproject.toml
 *Or use* `pip install -r requirements.txt` *if not using uv.*
 
 **3. Set Up Environment Variables**
-Create a `.env` file at the project root and add your DDS Cloud API key [create an account here (https://user.deepdataspace.com/login?redirect=https%3A%2F%2Fcloud.deepdataspace.com%2Fapply-token%3Ffrom%3Dsdk)]:
+Create a `.env` file at the project root and add your DDS Cloud API key [create an account here](https://user.deepdataspace.com/login?redirect=https%3A%2F%2Fcloud.deepdataspace.com%2Fapply-token%3Ffrom%3Dsdk):
 
 ```env
 API_KEY=your_dds_api_key_here
