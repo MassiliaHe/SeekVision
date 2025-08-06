@@ -1,59 +1,66 @@
+# **SeekVision: DINO-X Detection & Segmentation with DDS Cloud API** 🎯
 
-# **Lasqo: DINO-X Inference with DDS Cloud API** 🚀  
-
-Lasqo is a **Streamlit app** for object detection and segmentation using the **DDS Cloud API** and **DINO-X**.  
-Upload an image, set a text prompt, and get **annotated results with bounding boxes and masks**.
+SeekVision is a **Streamlit application** for object detection and segmentation using the **DDS Cloud API** and **DINO-X** models.  
+Upload your image, choose prompt or prompt-free mode, and get instant visual results: bounding boxes, masks, and class labels.
 
 ---
 
-## 📌 **Example Output**  
+## 📌 **Example Output**
 
-### 🖼️ **Original vs. Annotated Image**  
-| ![Original](assets/iphone-apps-app-store.jpg) | ![Annotated](assets/iphone-apps-app-store-annotated.png) | 
+### 🖼️ Original vs. Annotated Image
 
-## ⚙️ **Installation & Setup**  
+| Original | Annotated |
+| :------: | :-------: |
+| ![Original](Assets/iphone-apps-app-store.jpg) | ![Annotated](assets/annotated_image.jpg) |
 
-### **1️⃣ Clone the Repository**  
+---
+
+## ⚙️ **Installation & Setup**
+
+### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/MassiliaHe/LasqoApp.git
-cd lasqo
-```
-
-### **2️⃣ Install Dependencies**  
-```bash
+git clone https://github.com/YourUsername/SeekVision.git
+cd SeekVision
+2️⃣ Install Dependencies
+bash
+Copier
+Modifier
 uv pip install -r pyproject.toml
-```
+Or use pip install -r requirements.txt if not using uv.
 
-### **3️⃣ Set Up Environment Variables**  
-Create a `.env` file and add your API key:  
-```env
+3️⃣ Set Up Environment Variables
+Create a .env file and add your DDS Cloud API key:
+
+env
+Copier
+Modifier
 API_KEY=your_dds_api_key_here
-```
-
-### **4️⃣ Run the Application**  
-```bash
+4️⃣ Run the Application
+bash
+Copier
+Modifier
 uv run streamlit run app.py
-```
+🎯 Usage
+Enter your API key or load it from .env.
 
----
+Choose Prompt or Prompt-Free mode.
 
-## 🎯 **Usage**  
+(Optional) Set a text prompt (e.g., Text . logo . image).
 
-1. **Enter your API key** or load it from `.env`.  
-2. **Set a text prompt** (e.g., `"Text . logo . image"`).  
-3. **Adjust the bounding box threshold** if needed.  
-4. **Upload an image** (JPG, PNG).  
-5. **Click "Run Inference"** to get results.  
+Adjust the bounding box threshold if needed.
 
----
+Upload an image (.jpg, .png).
 
-## 📊 **Output Format**  
+Click "Run Inference" and view results instantly.
 
-### **📌 Annotated Image**  
-Displays bounding boxes, masks, and labels.  
+📊 Output Format
+🖼️ Annotated Image
+Bounding boxes, masks, and class labels are displayed on your image.
 
-### **📌 JSON Output (COCO-Style)**  
-```json
+📝 JSON Output (COCO-Style)
+json
+Copier
+Modifier
 {
     "detections": [
         {
@@ -64,42 +71,18 @@ Displays bounding boxes, masks, and labels.
         }
     ]
 }
-```
+🛠 Tech Stack
+Streamlit – User Interface
 
----
+DDS Cloud API – Object Detection
 
-## 🛠 **Tech Stack**  
-- **Streamlit** – UI  
-- **DDS Cloud API** – Object Detection  
-- **Supervision** – Visualization  
-- **OpenCV, NumPy** – Image Processing  
+Supervision – Visualization
 
----
+OpenCV, NumPy – Image Processing
 
-## 📜 **License**  
-MIT License.  
+📜 License
+MIT License
 
----
+⭐ Support the Project
+If you find this useful, give it a star ⭐ on GitHub! 🎉
 
-## ⭐ **Support the Project**  
-If you find this useful, **give it a star ⭐ on GitHub!** 🎉
-```
-
----
-
-### **Steps to Complete Your README**
-1. **Place Example Images in Your Repo**  
-   - Add `original_image.jpg` and `annotated_image.jpg` inside an `assets/` folder.
-   - Example command:
-     ```bash
-     mkdir assets
-     cp example_original.jpg assets/original_image.jpg
-     cp example_annotated.jpg assets/annotated_image.jpg
-     ```
-
-2. **Commit & Push the Changes**  
-   ```bash
-   git add README.md assets/original_image.jpg assets/annotated_image.jpg
-   git commit -m "Added example images and README"
-   git push origin main
-   ```

@@ -5,11 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "dds-cloudapi-sdk>=0.4.0",
-    "numpy>=2.2.2",
-    "opencv-python>=4.11.0.86",
-    "pycocotools>=2.0.8",
-    "python-dotenv>=1.0.1",
-    "streamlit>=1.42.0",
-    "supervision>=0.25.1",
+    "dds-cloudapi-sdk",
+    "flask",
+    "numpy",
+    "opencv-python",
+    "pycocotools",
+    "python-dotenv",
+    "streamlit",
+    "supervision",
 ]
+

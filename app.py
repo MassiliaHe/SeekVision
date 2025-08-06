@@ -5,81 +5,83 @@ import numpy as np
 import streamlit as st
 import supervision as sv
 from dotenv import load_dotenv
+from pathlib import Path
+from pycocotools import mask as mask_utils
+
+# DDS Cloud API v2 imports
+from dds_cloudapi_sdk import Config, Client
+from dds_cloudapi_sdk.image_resizer import image_to_base64
+from dds_cloudapi_sdk.tasks.v2_task import V2Task
 
 # Load environment variables from the .env file (if present)
 load_dotenv()
 
-# DDS Cloud API imports
-from dds_cloudapi_sdk import Config, Client, TextPrompt
-from dds_cloudapi_sdk.tasks.dinox import DinoxTask
-from dds_cloudapi_sdk.tasks.detection import DetectionTask
-from dds_cloudapi_sdk.tasks.types import DetectionTarget
-
-
-def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image_bytes: bytes):
+def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image_bytes: bytes, prompt_free: bool = False):
     """
-    Runs the DDS Cloud API inference on the provided image bytes and returns the annotated image.
+    Runs the DDS Cloud API inference (V2) on the provided image bytes and returns the annotated image.
     """
     # Write the uploaded image bytes to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
         temp_file.write(image_bytes)
         temp_file_path = temp_file.name
 
+    # Convert the image to base64 as required by the new API
+    image_base64 = image_to_base64(temp_file_path)
+    os.remove(temp_file_path)
+
     # Initialize DDS Cloud API client
     config = Config(api_token)
     client = Client(config)
 
-    # Upload file to the DDS server to get its URL
-    image_url = client.upload_file(temp_file_path)
+    # Build API body
+    api_body = {
+        "model": "DINO-X-1.0",
+        "image": image_base64,
+        "prompt": {
+            "type": "universal"
+        },
+        "targets": ["bbox", "mask"],
+        "mask_format": "coco_rle",
+        "bbox_threshold": bbox_threshold,
+        "iou_threshold": 0.8
+    }
+    # Add text to the prompt if not in prompt-free mode
+    if not prompt_free and text_prompt.strip():
+        api_body["prompt"]["text"] = text_prompt.strip()
 
-    # Create and run the DINO-X task
-    task = DinoxTask(
-        image_url=image_url,
-        prompts=[TextPrompt(text=text_prompt)],
-        bbox_threshold=bbox_threshold,
-        targets=[DetectionTarget.BBox, DetectionTarget.Mask]
+    # Create and run the V2Task
+    task = V2Task(
+        api_path="/v2/task/dinox/detection",
+        api_body=api_body
     )
     client.run_task(task)
-    predictions = task.result.objects
+    result = task.result
 
-    # Remove the temporary file since it is no longer needed
-    os.remove(temp_file_path)
+    objects = result.get("objects", [])
 
-    # Prepare class mappings from the text prompt (e.g., "Text . logo . image")
-    classes = [x.strip().lower() for x in text_prompt.split('.') if x]
-    class_name_to_id = {name: idx for idx, name in enumerate(classes)}
+    # Prepare class mappings and JSON result
+    classes = [obj["category"].lower().strip() for obj in objects]
+    class_name_to_id = {name: idx for idx, name in enumerate(set(classes))}
 
-    # Process predictions to extract boxes, masks, scores, and class IDs
     boxes = []
     masks = []
     confidences = []
     class_names = []
     class_ids = []
-    json_result = {
-        "detections": []
-    }
+    json_result = {"detections": []}
 
-    for obj in predictions:
-        boxes.append(obj.bbox)
-        x_min, y_min, x_max, y_max = obj.bbox
-        width = x_max - x_min
-        height = y_max - y_min
-        # Convert the mask from RLE to a numpy array
-        mask = DetectionTask.rle2mask(
-            DetectionTask.string2rle(obj.mask.counts), obj.mask.size
-        )
-        masks.append(mask)
-        confidences.append(obj.score)
-        cls_name = obj.category.lower().strip()
+    for obj in objects:
+        boxes.append(obj["bbox"])
+        masks.append(mask_utils.decode(obj["mask"]))
+        confidences.append(obj["score"])
+        cls_name = obj["category"].lower().strip()
         class_names.append(cls_name)
-        # Use the mapping from the prompt; if not found, assign a default value (-1)
-        class_ids.append(class_name_to_id.get(cls_name, -1))
-            # Format JSON result
+        class_ids.append(class_name_to_id[cls_name])
         json_result["detections"].append({
-            "bbox": [x_min, y_min, width, height],  # COCO-style format
+            "bbox": obj["bbox"],  # [x_min, y_min, x_max, y_max]
             "category_name": cls_name,
-            "category_id": class_ids[-1],
-            "score": confidences[-1]
+            "category_id": class_name_to_id[cls_name],
+            "score": obj["score"]
         })
 
     boxes = np.array(boxes)
@@ -87,21 +89,20 @@ def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image
     class_ids = np.array(class_ids)
     labels = [f"{cls} {conf:.2f}" for cls, conf in zip(class_names, confidences)]
 
-
-    # Read the original image (using OpenCV) from the uploaded bytes for annotation
+    # Decode image for annotation
     file_array = np.asarray(bytearray(image_bytes), dtype=np.uint8)
     img = cv2.imdecode(file_array, cv2.IMREAD_COLOR)
 
-    # Create a detections object for visualization using supervision
     if not len(boxes):
         return img.copy(), json_result
+
     detections = sv.Detections(
         xyxy=boxes,
         mask=masks.astype(bool),
         class_id=class_ids,
     )
 
-    # Annotate the image: draw bounding boxes, labels, and masks
+    # Annotate the image
     annotated_img = img.copy()
     box_annotator = sv.BoxAnnotator()
     annotated_img = box_annotator.annotate(scene=annotated_img, detections=detections)
@@ -114,14 +115,22 @@ def run_inference(api_token: str, text_prompt: str, bbox_threshold: float, image
 
     return annotated_img, json_result
 
-
 def main():
-    st.set_page_config(page_title="Lasqo", page_icon="icons/lasqo_small.png")
-    st.title("DINO-X Inference with DDS Cloud API")
+    st.set_page_config(page_title="SeekVision", page_icon="icons/SeekVision_small.png")
+    st.title("DINO-X Inference with DDS Cloud API (v2)")
 
-    # Sidebar: Configuration options for API key, prompt, and bbox threshold
+    # Sidebar: Logo + Nom d'app + Configuration
     with st.sidebar:
-        st.logo("icons/lasqo.png", size="large", icon_image="icons/lasqo_small.png")
+        # Affiche le logo et le nom côte à côte
+        col1, col2 = st.columns([1, 5])
+        with col1:
+            st.image("icons/SeekVision.png", width=40)
+        with col2:
+            st.markdown(
+                "<h2 style='margin-bottom: 0; margin-top: 10px; font-weight: 800; letter-spacing: 1px;'>SeekVision</h2>",
+                unsafe_allow_html=True
+            )
+        st.markdown("---")  # ligne de séparation élégante
         st.header("Configuration")
         API_KEY = os.getenv('API_KEY') or ""
         api_token = st.text_input(
@@ -131,6 +140,7 @@ def main():
         bbox_threshold = st.slider(
             "BBox Threshold", min_value=0.0, max_value=1.0, value=0.20, step=0.05
         )
+        prompt_free = st.checkbox("Prompt-Free Mode", value=False, help="Ignore the text prompt and use universal detection.")
 
     # Main: Upload an image
     uploaded_file = st.file_uploader("Choose an image", type=["png", "jpg", "jpeg"], accept_multiple_files=False)
@@ -147,7 +157,7 @@ def main():
             # Run the inference using your custom function
             with st.spinner("Running inference..."):
                 annotated_img, result_json = run_inference(
-                    api_token, text_prompt, bbox_threshold, image_bytes
+                    api_token, text_prompt, bbox_threshold, image_bytes, prompt_free
                 )
                 annotated_rgb = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
 
@@ -167,7 +177,6 @@ def main():
                 st.json(result_json)
         else:
             st.warning("Please add an image to run DinoX Inference")
-
 
 if __name__ == "__main__":
     main()
