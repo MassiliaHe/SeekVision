@@ -1,8 +1,4 @@
-Bien sûr, voici une **version professionnelle et claire de ton README** — mise en forme moderne, sections lisibles, bon anglais, et liens/images faciles à adapter.
 
----
-
-````markdown
 # 🚀 SeekVision: DINO-X Detection & Segmentation with DDS Cloud API
 
 **SeekVision** is an interactive web app for object detection and segmentation using the latest **DDS Cloud API** and **DINO-X** models.  
